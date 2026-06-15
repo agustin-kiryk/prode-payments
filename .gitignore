@@ -1,0 +1,40 @@
+# Ignorar node_modules
+node_modules/
+
+# Ignorar archivos de build
+dist/
+build/
+*.tsbuildinfo
+
+# Ignorar archivos de entorno
+.env
+.env.local
+.env.*.local
+
+# Ignorar base de datos
+*.db
+*.db-journal
+
+# Ignorar logs
+logs/
+*.log
+npm-debug.log*
+
+# Ignorar archivos de IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Ignorar OS
+.DS_Store
+Thumbs.db
+
+# Ignorar archivos de Prisma generados
+backend/prisma/migrations/
+
+# Ignorar cache
+.cache/
+.parcel-cache/
+

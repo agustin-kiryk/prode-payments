@@ -1,0 +1,22 @@
+{
+  "name": "prode-mundial-2026",
+  "version": "1.0.0",
+  "description": "🇦🇷 Aplicación de Prode para el Mundial 2026 - Backend TypeScript/Node.js + Frontend React",
+  "private": true,
+  "scripts": {
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev": "npm run dev:backend & npm run dev:frontend",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "build": "npm run build:backend && npm run build:frontend",
+    "prisma:generate": "cd backend && npm run prisma:generate",
+    "prisma:migrate": "cd backend && npm run prisma:migrate",
+    "prisma:seed": "cd backend && npm run prisma:seed",
+    "setup": "npm run install:all && npm run prisma:generate && npm run prisma:migrate && npm run prisma:seed"
+  },
+  "keywords": ["prode", "mundial", "argentina", "typescript", "node", "react"],
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: prode-mundial-backend
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: |
+      npm install
+      npx prisma generate
+      npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      - key: DATABASE_URL
+        generateValue: true
+      - key: FOOTBALL_DATA_API_KEY
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: ADMIN_TOKEN
+        value: prode-admin-2026
+    autoDeploy: true
+
