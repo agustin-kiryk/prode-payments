@@ -1,6 +1,3 @@
-// Prisma Schema para Prode Mundial 2026 🇦🇷
-// Similar a JPA Entities en Java/Spring Boot
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,68 +7,62 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Usuario del equipo (como @Entity en JPA)
 model User {
   id          Int          @id @default(autoincrement())
   name        String       @unique
-  avatar      String       // Emoji argentino 🇦🇷⚽🏆
-  color       String       @default("#75AADB") // Celeste AFA
-  createdAt   DateTime     @default(now())
+  avatar      String
+  color       String       @default("#75AADB")
+  createdAt   DateTime     @default(now()) @db.Timestamp(6)
   predictions Prediction[]
 
   @@map("users")
 }
 
-// Partido del Mundial (equivalente a Match entity)
 model Match {
   id              Int          @id @default(autoincrement())
-  apiFootballId   Int?         @unique // ID de API-Football
+  apiFootballId   Int?         @unique
   homeTeam        String
   awayTeam        String
-  homeFlag        String       @default("🏴") // Emoji bandera
+  homeFlag        String       @default("🏴")
   awayFlag        String       @default("🏴")
-  date            DateTime
+  date            DateTime     @db.Timestamp(6)
   stadium         String?
-  stage           String       // "Group Stage", "Round of 16", "Quarter-finals", etc.
-  group           String?      // "Group A", "Group B", etc.
+  stage           String
+  group           String?
   homeScore       Int?
   awayScore       Int?
-  status          String       @default("scheduled") // scheduled, live, finished
+  status          String       @default("scheduled")
   isPronosticable Boolean      @default(true)
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  createdAt       DateTime     @default(now()) @db.Timestamp(6)
+  updatedAt       DateTime     @updatedAt @db.Timestamp(6)
   predictions     Prediction[]
 
   @@map("matches")
 }
 
-// Pronóstico de usuario (como Prediction entity)
 model Prediction {
-  id                   Int      @id @default(autoincrement())
-  userId               Int
-  matchId              Int
-  predictedHomeScore   Int
-  predictedAwayScore   Int
-  points               Int      @default(0) // Calculado automáticamente
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  id                 Int      @id @default(autoincrement())
+  userId             Int
+  matchId            Int
+  predictedHomeScore Int
+  predictedAwayScore Int
+  points             Int      @default(0)
+  createdAt          DateTime @default(now()) @db.Timestamp(6)
+  updatedAt          DateTime @updatedAt @db.Timestamp(6)
+  match              Match    @relation(fields: [matchId], references: [id])
+  user               User     @relation(fields: [userId], references: [id])
 
-  user                 User     @relation(fields: [userId], references: [id])
-  match                Match    @relation(fields: [matchId], references: [id])
-
-  @@unique([userId, matchId]) // Un usuario solo puede pronosticar una vez por partido
+  @@unique([userId, matchId])
   @@map("predictions")
 }
 
-// Configuración del Prode (metadata)
 model Prode {
   id          Int      @id @default(autoincrement())
   name        String   @default("Prode Mundial 2026 🇦🇷")
   description String   @default("Pronósticos del equipo para el Mundial 2026")
-  startDate   DateTime
-  endDate     DateTime
-  createdAt   DateTime @default(now())
+  startDate   DateTime @db.Timestamp(6)
+  endDate     DateTime @db.Timestamp(6)
+  createdAt   DateTime @default(now()) @db.Timestamp(6)
 
   @@map("prode")
 }
-

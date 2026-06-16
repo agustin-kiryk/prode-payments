@@ -14,11 +14,16 @@
     "db:ver": "ts-node scripts/ver-bd.ts",
     "db:reset": "prisma migrate reset --force && prisma db seed"
   },
-  "keywords": ["prode", "mundial", "argentina", "typescript"],
+  "keywords": [
+    "prode",
+    "mundial",
+    "argentina",
+    "typescript"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^5.14.0",
+    "@prisma/client": "^5.22.0",
     "axios": "^1.7.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -35,4 +40,3 @@
     "typescript": "^5.4.5"
   }
 }
-
