@@ -7,7 +7,8 @@ interface NavTabsProps {
 export const NavTabs = ({ activeTab, onTabChange }: NavTabsProps) => {
   const tabs = [
     { id: 'matches', label: '⚽ Partidos', icon: '🏟️' },
-    { id: 'leaderboard', label: '🏆 Tabla', icon: '📊' },
+    { id: 'predictions', label: '📋 Pronósticos', icon: '📊' },
+    { id: 'leaderboard', label: '🏆 Tabla', icon: '👑' },
     { id: 'config', label: '⚙️ Config', icon: '🔧' },
   ];
 

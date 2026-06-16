@@ -5,6 +5,7 @@ import { Header } from './components/Header';
 import { NavTabs } from './components/NavTabs';
 import { Leaderboard } from './components/Leaderboard';
 import { MatchesPage } from './pages/MatchesPage';
+import { PredictionsPage } from './pages/PredictionsPage';
 import { ConfigPage } from './pages/ConfigPage';
 import { getUsers } from './utils/api';
 import { useSocket } from './hooks/useSocket';
@@ -96,6 +97,13 @@ function App() {
           <MatchesPage
             selectedUser={selectedUser}
             onPredictionSaved={handlePredictionSaved}
+          />
+        )}
+
+        {activeTab === 'predictions' && (
+          <PredictionsPage
+            users={users}
+            selectedUser={selectedUser}
           />
         )}
 
