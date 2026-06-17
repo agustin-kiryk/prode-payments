@@ -12,7 +12,11 @@ import {
 const router = Router();
 
 // Rutas específicas PRIMERO (antes de /:id)
+// Soportar both paths depending on how router is mounted.
+// - If mounted at /api/users => /api/users/leaderboard/all
+// - If mounted at /api/leaderboard => /api/leaderboard/all
 router.get('/leaderboard/all', getLeaderboard);
+router.get('/all', getLeaderboard);
 router.get('/stats/prode', getProdeStats);
 
 // Rutas genéricas DESPUÉS

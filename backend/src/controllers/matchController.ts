@@ -111,22 +111,50 @@ export const syncMatches = async (req: Request, res: Response) => {
         continue;
       }
 
+      // Buscar partido existente por apiFootballId
       const existing = await prisma.match.findUnique({
         where: { apiFootballId: fixture.apiFootballId },
       });
 
       if (existing) {
-        await prisma.match.update({
+        // Actualizo y obtengo el partido actualizado
+        const updatedMatch = await prisma.match.update({
           where: { apiFootballId: fixture.apiFootballId },
           data: fixture,
         });
         console.log(`📝 Actualizado: ${fixture.homeTeam} vs ${fixture.awayTeam} (pronosticable: ${fixture.isPronosticable})`);
         updated++;
+
+        // Si ahora tiene resultado final (scores presentes), recalcular puntos siempre
+        if (updatedMatch.homeScore != null && updatedMatch.awayScore != null) {
+          try {
+            await scoringService.updatePredictionsForMatch(updatedMatch.id);
+            emitMatchResultUpdate(updatedMatch.id);
+            emitLeaderboardUpdate();
+            console.log(`🔁 Puntos recalculados para partido ${updatedMatch.id} tras sincronización`);
+          } catch (err) {
+            console.error('❌ Error al actualizar pronósticos tras sincronización:', err);
+          }
+        }
       } else {
-        await prisma.match.create({
+        // Creo y obtengo el partido creado
+        const createdMatch = await prisma.match.create({
           data: fixture as any,
         });
+        console.log(`➕ Creado: ${fixture.homeTeam} vs ${fixture.awayTeam} (pronosticable: ${fixture.isPronosticable})`);
         created++;
+
+        // Si el partido se creó ya con resultado final, recalcular siempre
+        if (createdMatch.homeScore != null && createdMatch.awayScore != null) {
+          try {
+            await scoringService.updatePredictionsForMatch(createdMatch.id);
+            emitMatchResultUpdate(createdMatch.id);
+            emitLeaderboardUpdate();
+            console.log(`🔁 Puntos recalculados para partido ${createdMatch.id} creado con resultado`);
+          } catch (err) {
+            console.error('❌ Error al actualizar pronósticos tras crear partido sincronizado:', err);
+          }
+        }
       }
     }
 

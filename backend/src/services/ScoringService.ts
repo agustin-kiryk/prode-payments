@@ -67,6 +67,7 @@ export class ScoringService {
     }
 
     let updatedCount = 0;
+    let skippedCount = 0;
 
     for (const prediction of match.predictions) {
       const points = this.calculatePoints(
@@ -76,15 +77,19 @@ export class ScoringService {
         match.awayScore
       );
 
-      await this.prisma.prediction.update({
-        where: { id: prediction.id },
-        data: { points },
-      });
-
-      updatedCount++;
+      // Solo actualizar si los puntos cambiaron para evitar escrituras innecesarias
+      if (prediction.points !== points) {
+        await this.prisma.prediction.update({
+          where: { id: prediction.id },
+          data: { points },
+        });
+        updatedCount++;
+      } else {
+        skippedCount++;
+      }
     }
 
-    console.log(`✅ Actualizados ${updatedCount} pronósticos para partido ${matchId}`);
+    console.log(`✅ Actualizados ${updatedCount} pronósticos para partido ${matchId} (skipped: ${skippedCount})`);
     return updatedCount;
   }
 
