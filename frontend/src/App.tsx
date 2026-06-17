@@ -51,6 +51,13 @@ function App() {
     loadUsers();
   }, []);
 
+  // Cuando el usuario navega a la pestaña 'leaderboard', forzar recarga de la tabla
+  useEffect(() => {
+    if (activeTab === 'leaderboard') {
+      setLeaderboardRefresh((prev) => prev + 1);
+    }
+  }, [activeTab]);
+
   const loadUsers = async () => {
     try {
       const data = await getUsers();
